@@ -43,11 +43,11 @@ public abstract class ChunkBuilderMixin {
             },
             require = 1, allow = 1
     )
-    private static int modifyMaxThreads(int maxThreads) {
+    private static int modifyChunkUpdateThreads(int threadCount) {
         if (SeedQueue.isOnWall()) {
             return SeedQueue.config.getChunkUpdateThreads();
         }
-        return maxThreads;
+        return threadCount;
     }
 
     // most of the logic in startWorkers was extracted to createWorker in sodium 2.4.0
