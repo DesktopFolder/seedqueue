@@ -1,6 +1,7 @@
 package me.contaria.seedqueue.mixin.compat.sodium;
 
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
+import com.llamalad7.mixinextras.injector.ModifyReturnValue;
 import com.llamalad7.mixinextras.injector.v2.WrapWithCondition;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
@@ -48,6 +49,19 @@ public abstract class ChunkBuilderMixin {
             return SeedQueue.config.getChunkUpdateThreads();
         }
         return threadCount;
+    }
+
+    @Dynamic
+    @ModifyReturnValue(
+            method = "getMaxThreadCount",
+            at = @At("RETURN"),
+            require = 0
+    )
+    private static int modifyMaxThreads(int maxThreads) {
+        if (SeedQueue.isOnWall()) {
+            return SeedQueue.config.getChunkUpdateThreads();
+        }
+        return maxThreads;
     }
 
     // most of the logic in startWorkers was extracted to createWorker in sodium 2.4.0
